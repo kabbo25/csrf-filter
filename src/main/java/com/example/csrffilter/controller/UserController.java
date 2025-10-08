@@ -5,6 +5,7 @@ import com.example.csrffilter.service.CustomUserDetailsService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,6 +20,15 @@ public class UserController {
             return ResponseEntity.status(HttpServletResponse.SC_CREATED).body("new user created");
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+    @PostMapping("/verify")
+    public ResponseEntity<String> verifyUser(@RequestBody CustomUser customUser){
+        try{
+            return ResponseEntity.status(HttpServletResponse.SC_OK).body("verification successful");
+        }
+        catch (BadCredentialsException e){
+            return ResponseEntity.status(HttpServletResponse.SC_UNAUTHORIZED).body("username or password not correct");
         }
     }
 }
